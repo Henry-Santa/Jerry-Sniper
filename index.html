@@ -253,6 +253,53 @@
       justify-content: center;
       margin-top: 10px;
     }
+    .reload {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #F7C600;
+        color: #111;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .dropdown-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #333;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px; /* Set a maximum width if needed */
+      margin: 0 auto; /* Center the dropdown horizontally */
+    }
+
+    .dropdown-select:focus {
+      outline: none;
+    }
+
+    .dropdown-option {
+        width: 100%;
+        
+        color: #111;
+        font-weight: bold;
+      padding: 10px;
+    }
+
+    .dropdown-container {
+        display: inline-flex;
+      position: relative;
+      justify-content: center;
+        align-items: center;
+      width: 100%;
+    }
 
     </style>
 </head>
@@ -289,12 +336,12 @@
         <div class="number-group">
             <div class="input-group">
             <label for="minimum-profit">Minimum Profit:</label>
-            <input type="number" id="minimum-profit" value="500000">
+            <input type="number" id="minimum-profit" value="300000">
             </div>
             
             <div class="input-group">
             <label for="minimum-percentage">Minimum Percentage:</label>
-            <input type="number" id="minimum-percentage" value="15">
+            <input type="number" id="minimum-percentage" value="10">
             </div>
             
             <div class="input-group">
@@ -302,6 +349,15 @@
             <input type="number" id="minimum-stock" value="15">
             </div>
         </div>
+        <div class="dropdown-container">
+            <span>Sort By : </span>
+            <select id="dropdown-select" class="dropdown-select">
+              <option value="profit">Max Profit</option>
+              <option value="margin">Max Margin</option>
+              <option value="alpha">Alphabetical</option>
+            </select>
+            
+          </div>
       </div>
 
     <div class="scroll-container" id="scrollContainer">
@@ -315,6 +371,10 @@
         <label for="toggle-button" class="toggle-label">Toggle Finding Flips</label>
       </div>
     
+      <div class="toggle-container">
+        <button class="reload" onclick="useParams()">Force Reload</button>
+      </div>
+
       <div class="status-display">
         <span id="status-display-text">Waiting...</span>
       </div>
@@ -326,30 +386,10 @@
         </div>
 
         <script>
-        window.addEventListener('load', function() {
-        function buildCopyListener(button) {
-        button.addEventListener('click', function() {
-            var widget = button.closest('.widget');
-            var attributeValue = widget.getAttribute('ah-command');
         
-            var tempInput = document.createElement('input');
-            tempInput.value = attributeValue;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            
-            button.innerText = 'Copied!';
-            setTimeout(function() {
-            button.innerText = 'Copy';
-            }, 1500);
-        });
-        }
-        
-        var copyButtons = document.querySelectorAll('.copy-button');
-        copyButtons.forEach(buildCopyListener);
-    });
-      </script>
+                
+                
+    </script>
     <script src="ahInfo.js"></script>
     <script src="main.js"></script>
 </body>

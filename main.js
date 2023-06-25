@@ -45,7 +45,7 @@ async function getItemTable(){
     })
 }
 
-async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HIDE_DRAGON_ITEMS, PROFITMIN, PERMIN, STOCKMIN){
+async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HIDE_DRAGON_ITEMS, PROFITMIN, PERMIN, STOCKMIN, SORTTYPE){
     var resp = await fetch(API)
     var json = await resp.json()
     var pages = json.totalPages
@@ -105,7 +105,7 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
             let im;
             try {im = itemTable.get(name).image} catch {im = "https://nmsr.nickac.dev/headiso/b341f7f22c7a4a2d9c50816a8e6759e8"}
             var flip = new ahFlip(item[0], item[0].price, item[1].price, im)
-            if (flip.profit > PROFITMIN && flip.percent > PERMIN){
+            if (flip.profit >= PROFITMIN && flip.percent >= PERMIN){
                 profitable_flips.push(flip)
             }
         }
@@ -113,9 +113,14 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
     
     CONTAINER.innerHTML = "";
     console.log(profitable_flips.length)
+    profitable_flips.sort((a, b) => {if (SORTTYPE == "profit"){return b.profit - a.profit}if (SORTTYPE == "margin"){return b.percent - a.percent}else {var textA = a.info.name.toUpperCase();var textB = b.info.name.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;}})
     for (flip of profitable_flips){
         flip.createWidget();
     }
+    var buttons = document.querySelectorAll('.copy-button');
+    buttons.forEach(function(button) {
+        ahFlip.createButtonListener(button);
+    });
     if (profitable_flips.length == 0){
         CONTAINER.innerHTML = "<p>No Snipe Flips Found :(</p>"
     }
@@ -132,7 +137,9 @@ async function useParams(){
     const mper = document.getElementById("minimum-percentage").value;
     const mstock = document.getElementById("minimum-stock").value;
 
-    findFlips(furn, pet_skins, dungeon, dragon, mprof, mper/100, mstock)
+    const sort = document.getElementById("dropdown-select").value;
+
+    findFlips(furn, pet_skins, dungeon, dragon, mprof, mper/100, mstock, sort)
 }
 
 async function main(){
@@ -140,6 +147,7 @@ async function main(){
     await getItemTable()
     STATUS.innerText = "Waiting..."
     
+    useParams()
 
     let last = 0;
     

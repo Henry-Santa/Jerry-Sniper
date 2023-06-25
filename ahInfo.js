@@ -33,9 +33,26 @@ class ahFlip {
         this.percent = this.profit/price;
     }
 
+    static createButtonListener(button){
+        button.addEventListener('click', function() {
+            var widget = button.closest('.widget');
+            var attributeValue = widget.getAttribute('ah-command');
+        
+            var tempInput = document.createElement('input');
+            tempInput.value = attributeValue;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            button.innerText = 'Copied!';
+            setTimeout(function() {
+            button.innerText = 'Copy';
+            }, 1500);
+        });
+    }
 
-
-    async createWidget() {
+    createWidget() {
 
         var wid = `<div class="widget" ah-command="/viewauction ${this.info.auction_id}">
             <img src="${this.image}" alt="Product Image">
@@ -45,7 +62,7 @@ class ahFlip {
             <p>Profit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="profit">$${this.profit.toLocaleString()}</span></p>
             <p>Profit Percentage: <span class="profit-percentage">${Math.round(this.percent*100)}%</span></p>
             <br>
-            <button class="copy-button">Copy</button>
+            <button class="copy-button" id="${this.info.auction_id}">Copy</button>
         </div>
         `
         if (CONTAINER.innerHTML){
