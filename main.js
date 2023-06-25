@@ -112,6 +112,7 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
     })
     
     CONTAINER.innerHTML = "";
+    console.log(profitable_flips.length)
     for (flip of profitable_flips){
         flip.createWidget();
     }
