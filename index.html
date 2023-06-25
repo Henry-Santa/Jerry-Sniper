@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jerry Sniper</title>
+    <style>
+
+        /* Reset default styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+        /* Dark theme styles */
+    body {
+      background-color: #222;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    p {
+        padding: 3px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 70px;
+      color: #F7C600;
+      margin-top: 20px;
+    }
+    .scroll-container {
+      overflow-x: scroll;
+      white-space: nowrap;
+      scrollbar-width: thin;
+      scrollbar-color: #888 #333;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #333;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 4px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    }
+    
+    .widget {
+    display: inline-block;
+    margin: 10px;
+    width: 300px;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 5px;
+    word-wrap: break-word; /* Added property */
+    overflow-wrap: anywhere;
+    white-space: normal; /* Added property */
+    }
+    
+    .widget img {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+        min-width: 100%;
+        width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+    }
+    .copy-button {
+    background-color: #F7C600;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    }
+
+    .copy-button:hover {
+        background-color: #D6A600;
+    }
+
+    .options {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .options label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    
+    .options .input-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .options .input-group label {
+      margin-right: 10px;
+    }
+    
+    .options .input-group input[type="number"] {
+      padding: 5px;
+      color: #fff;
+      background-color: #333;
+      border: none;
+      border-radius: 3px;
+      outline: none;
+      transition: background-color 0.3s;
+      font-size: 14px;
+    }
+    
+    .options .input-group input[type="number"]:hover,
+    .options .input-group input[type="number"]:focus {
+      background-color: #444;
+    }
+    
+    .options .bool-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-gap: 10px;
+      margin-bottom: 10px;
+    }
+    .options .number-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-gap: 10px;
+      margin-bottom: 10px;
+      margin-top: 20px;
+    }
+    .options .bool-group label {
+      display: flex;
+      align-items: center;
+    }
+    
+    .options .bool-group input[type="checkbox"] {
+      display: none;
+    }
+    
+    .options .bool-group input[type="checkbox"] + .checkmark {
+      position: relative;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #F7C600;
+      border-radius: 3px;
+      background-color: transparent;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .options .bool-group input[type="checkbox"]:checked + .checkmark {
+      background-color: #F7C600;
+    }
+    
+    .instructions {
+      background-color: #333;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .instructions p {
+      color: #fff;
+    }
+    
+    .instructions a {
+      color: #F7C600;
+      text-decoration: none;
+    }
+    
+    .instructions a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    background-color: #111;
+    padding: 10px 0;
+    left: 0;
+    }
+    
+    .footer a {
+        text-decoration: none;
+        color: #F7C600;
+    }
+
+    .price {
+        color: #F7C600;
+    }
+    
+    .sell-price {
+        color: #F7C600;
+    }
+    
+    .profit {
+        color: #00FF7F;
+    }
+    
+    .profit-percentage {
+        color: #00FF7F;
+    }
+
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .toggle-button {
+      display: none;
+    }
+
+    .toggle-label {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background-color: gray;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-button:checked + .toggle-label {
+      background-color: #F7C600;
+      color: #111;
+    }
+
+    .status-display {
+        background-color: #333;
+        padding: 20px;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    </style>
+</head>
+<body>
+    
+    <h1 class="title">Jerry Sniper</h1>
+
+    <div class="options">
+        <div class="bool-group">
+          <label>
+            <input type="checkbox" id="hide-furniture" checked>
+            <span class="checkmark"></span>
+            Hide Furniture
+            </label>
+          
+            <label>
+            <input type="checkbox" id="hide-pet-skins" checked>
+            <span class="checkmark"></span>
+            Hide Pet Skins
+            </label>
+          
+            <label>
+            <input type="checkbox" id="hide-dungeon-items">
+            <span class="checkmark"></span>
+            Hide Dungeon Items
+            </label>
+          
+            <label>
+            <input type="checkbox" id="hide-dragon-items" checked>
+            <span class="checkmark"></span>
+            Hide Dragon Items
+            </label>
+        </div>
+        <div class="number-group">
+            <div class="input-group">
+            <label for="minimum-profit">Minimum Profit:</label>
+            <input type="number" id="minimum-profit" value="500000">
+            </div>
+            
+            <div class="input-group">
+            <label for="minimum-percentage">Minimum Percentage:</label>
+            <input type="number" id="minimum-percentage" value="15">
+            </div>
+            
+            <div class="input-group">
+            <label for="minimum-stock">Minimum Auctionhouse Stock:</label>
+            <input type="number" id="minimum-stock" value="15">
+            </div>
+        </div>
+      </div>
+
+    <div class="scroll-container" id="scrollContainer">
+        
+        
+        <!-- Add more widgets as needed -->
+      </div>
+
+      <div class="toggle-container">
+        <input type="checkbox" id="toggle-button" class="toggle-button" checked>
+        <label for="toggle-button" class="toggle-label">Toggle Finding Flips</label>
+      </div>
+    
+      <div class="status-display">
+        <span id="status-display-text">Waiting...</span>
+      </div>
+
+        <div class="footer">
+        <p>If you encounter any bugs or want to request new features, please visit our <a href="https://github.com/your-github-repo">GitHub repository</a>.</p>
+        <p>Made by <a href="https://github.com/henry-santa">Henry-Santa</a></p>
+        <p><a href="https://github.com/Henry-Santa/Jerry-Sniper">Github</a></p>
+        </div>
+
+        <script>
+        window.addEventListener('load', function() {
+        function buildCopyListener(button) {
+        button.addEventListener('click', function() {
+            var widget = button.closest('.widget');
+            var attributeValue = widget.getAttribute('ah-command');
+        
+            var tempInput = document.createElement('input');
+            tempInput.value = attributeValue;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            button.innerText = 'Copied!';
+            setTimeout(function() {
+            button.innerText = 'Copy';
+            }, 1500);
+        });
+        }
+        
+        var copyButtons = document.querySelectorAll('.copy-button');
+        copyButtons.forEach(buildCopyListener);
+    });
+      </script>
+    <script src="ahInfo.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
