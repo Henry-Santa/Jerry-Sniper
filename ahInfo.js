@@ -6,12 +6,16 @@ class ahInfo {
      * @param {number} price 
      * @param {string} auction_id 
      * @param {string} name 
+     * @param {string} rarity
+     * @param {string} real
      */
 
-    constructor (price, auction_id, name){
+    constructor (price, auction_id, name, rarity, real){
         this.price = price;
         this.auction_id = auction_id;
         this.name = name;
+        this.rarity = rarity;
+        this.real = real;
     }
 }
 
@@ -54,7 +58,7 @@ class ahFlip {
 
     createWidget() {
 
-        var wid = `<div class="widget" ah-command="/viewauction ${this.info.auction_id}">
+        var wid = `<div class="widget ${this.info.rarity.toLowerCase()}" ah-command="/viewauction ${this.info.auction_id}">
             <img src="${this.image}" alt="Product Image">
             <p>Product Name: ${this.info.name}</p>
             <p>Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="price">$${this.price.toLocaleString()}</span></p>

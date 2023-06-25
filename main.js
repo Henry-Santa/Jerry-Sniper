@@ -84,11 +84,13 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
                 if (real_name == "HurricaneBowx") {
                     real_name = "HurricaneBow"
                 }
+                b_real = real_name;
+                real_name += auction['tier'];
                 if (!(items.has(real_name))){
                     items.set(real_name, [])
                 }
 
-                items.get(real_name).push(new ahInfo(auction["starting_bid"], auction.uuid, auction["item_name"]))
+                items.get(real_name).push(new ahInfo(auction["starting_bid"], auction.uuid, auction["item_name"], auction['tier'], b_real))
             }
         });
         console.log("Page loaded", i)
@@ -103,7 +105,7 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
         item.sort((a, b) => a.price - b.price)
         if (item.length < STOCKMIN){} else{
             let im;
-            try {im = itemTable.get(name).image} catch {im = "https://nmsr.nickac.dev/headiso/b341f7f22c7a4a2d9c50816a8e6759e8"}
+            try {im = itemTable.get(item[0].real).image} catch {im = "https://nmsr.nickac.dev/headiso/b341f7f22c7a4a2d9c50816a8e6759e8"}
             var flip = new ahFlip(item[0], item[0].price, item[1].price, im)
             if (flip.profit >= PROFITMIN && flip.percent >= PERMIN){
                 profitable_flips.push(flip)
@@ -160,7 +162,7 @@ async function main(){
             STATUS.innerText = "Getting total page count...";
             useParams()
         }
-    }, 9000)
+    }, 5000)
 
 }
 
