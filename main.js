@@ -132,7 +132,7 @@ async function useParams(){
     const mper = document.getElementById("minimum-percentage").value;
     const mstock = document.getElementById("minimum-stock").value;
 
-    findFlips(furn, pet_skins, dungeon, dragon, mprof, mper, mstock)
+    findFlips(furn, pet_skins, dungeon, dragon, mprof, mper/100, mstock)
 }
 
 async function main(){
