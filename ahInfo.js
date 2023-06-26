@@ -1,14 +1,14 @@
 const CONTAINER = document.getElementById("scrollContainer");
 const TierToNum = {
-    "Common" : 0,
-    "Uncommon" : 1,
-    "Rare" : 2,
-    "Epic" : 3,
-    "Legendary" : 4,
-    "Mythic" : 5,
-    "Special" : 5,
-    "Very Special" : 5,
-    "Divine" : 6
+    "COMMON" : 0,
+    "UNCOMMON" : 1,
+    "RARE" : 2,
+    "EPIC" : 3,
+    "LEGENDARY" : 4,
+    "MYTHIC" : 5,
+    "SPECIAL" : 5,
+    "VERY SPECIAL" : 5,
+    "DIVINE" : 6
 }
 class ahInfo {
     /**
