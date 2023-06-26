@@ -8,6 +8,7 @@ const ITEMSAPI = "https://api.hypixel.net/resources/skyblock/items"
 const PROFITMIN = 500000
 const PERMIN = 0.15
 const STOCKMIN = 15
+let pages = 0;
 
 var itemTable = new Map()
 
@@ -59,11 +60,8 @@ async function getItemTable(){
     }
 }
 
-async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HIDE_DRAGON_ITEMS, PROFITMIN, PERMIN, STOCKMIN, SORTTYPE){
-    var resp = await fetch(API)
-    var json = await resp.json()
-    var pages = json.totalPages
-    console.log(pages);
+async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HIDE_DRAGON_ITEMS, PROFITMIN, PERMIN, STOCKMIN, SORTTYPE, pages){
+    //
 
     var items = new Map()
     var promises = []
@@ -164,7 +162,7 @@ async function useParams(){
 
     const sort = document.getElementById("dropdown-select").value;
 
-    findFlips(furn, pet_skins, dungeon, dragon, mprof, mper/100, mstock, sort)
+    findFlips(furn, pet_skins, dungeon, dragon, mprof, mper/100, mstock, sort, pages)
 }
 
 async function main(){
@@ -181,10 +179,11 @@ async function main(){
         console.log(json.lastUpdated != last, document.getElementById("toggle-button").checked, json.lastUpdated, last, "RELOADING")
         if (json.lastUpdated != last && document.getElementById("toggle-button").checked){
             last = json.lastUpdated;
+            pages = json.totalPages;
             STATUS.innerText = "Getting total page count...";
             useParams()
         }
-    }, 1000)
+    }, 400)
 
 }
 
