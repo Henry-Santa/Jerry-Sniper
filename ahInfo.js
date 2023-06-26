@@ -34,11 +34,11 @@ class ahFlip {
         this.image = image;
         this.target_price = target_price;
         this.profit = target_price - price;
-        
+        var tax = this.target_price * 0.01;
         if (this.target_price > 1_000_000){
-            var tax = Math.min(this.target_price * 0.01, 1_000_000)
-            this.profit -= tax
+            tax += this.target_price * 0.01;
         }
+        this.profit -= tax
         
         this.percent = this.profit/price;
     }
