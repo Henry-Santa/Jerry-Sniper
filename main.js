@@ -85,7 +85,10 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
                     real_name = "HurricaneBow"
                 }
                 b_real = real_name;
-                real_name += auction['tier'];
+                if (real_name.includes("Lvl")){
+                    real_name += auction['tier'];
+                }
+                
                 if (!(items.has(real_name))){
                     items.set(real_name, [])
                 }
@@ -162,7 +165,7 @@ async function main(){
             STATUS.innerText = "Getting total page count...";
             useParams()
         }
-    }, 5000)
+    }, 10000)
 
 }
 
