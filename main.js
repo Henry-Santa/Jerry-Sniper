@@ -87,6 +87,7 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
             else if (auction["item_lore"].toLowerCase().includes("dungeon") && HIDE_DUNGEON_ITEMS) { }
             else if (auction["item_name"].toLowerCase().includes("dragon") && HIDE_DRAGON_ITEMS) { }
             else if (auction["item_lore"] == "§f§lCOMMON") {}
+            else if (auction["item_lore"] == "§a§lUNCOMMON") {}
             else {
                 let real_name = ""
                 for (let char of auction["item_name"]){
