@@ -1,6 +1,6 @@
 # Jerry Sniper
 
-Jerry Sniper is a powerful tool for managing and optimizing your online marketplace listings. It helps you track prices, set target prices, calculate profits, and more, enabling you to make informed decisions and maximize your earnings.
+Jerry Sniper is a powerful tool for flipping auction BIN -> BIN on Hypixel Skyblock. Its simple and easy to use. Enjoy an intuitive flipping UI that is not overwhelming or filled with distractions.
 
 ## Features
 
