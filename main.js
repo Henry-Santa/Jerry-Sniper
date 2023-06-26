@@ -32,7 +32,7 @@ async function getItemTable(){
         var image_link = "https://henry-santa.github.io/auction-manipulation/images/" + item.material.toLowerCase() + ".png"
         if (item.material == "SKULL_ITEM"){
             if (item.skin == undefined){
-                console.log(item)
+
             } else{
                 var hash = JSON.parse(atob(item.skin)).textures.SKIN.url.split("/")
                 hash = hash[hash.length-1]
@@ -43,6 +43,21 @@ async function getItemTable(){
 
         itemTable.set(real_name, {name : item.name, id : item.id, image : image_link})
     })
+    for (let pet of Object.keys(PET_DATA)){
+        
+        pet = pet.toLowerCase();
+        var words = pet.split("_");
+        var new_words = []
+
+        for (let word of words){
+            let nword = word.charAt(0).toUpperCase()
+            + word.slice(1)
+            new_words.push(nword)
+
+        }
+        var final = new_words.join("")
+        itemTable.set("Lvl"+final, {name : new_words.join(" "), id : pet.toUpperCase(), image: PET_DATA[pet.toUpperCase()].head})
+    }
 }
 
 async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HIDE_DRAGON_ITEMS, PROFITMIN, PERMIN, STOCKMIN, SORTTYPE){
