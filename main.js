@@ -130,7 +130,6 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
             let im;
             try {im = itemTable.get(item[0].real).image} catch {im = "https://nmsr.nickac.dev/headiso/b341f7f22c7a4a2d9c50816a8e6759e8"}
             var flip = new ahFlip(item[0], item[0].price, item[1].price, im)
-            console.log(TierToNum[item[0].rarity], TierToNum[item[1].rarity])
             if (flip.profit >= PROFITMIN && flip.percent >= PERMIN && TierToNum[item[0].rarity] >= TierToNum[item[1].rarity]){
                 profitable_flips.push(flip)
             }
