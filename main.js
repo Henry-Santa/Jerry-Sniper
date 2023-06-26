@@ -168,7 +168,6 @@ async function main(){
     await getItemTable()
     STATUS.innerText = "Waiting..."
     
-    useParams()
 
     let last = 0;
     
@@ -181,7 +180,7 @@ async function main(){
             STATUS.innerText = "Getting total page count...";
             useParams()
         }
-    }, 10000)
+    }, 1000)
 
 }
 
