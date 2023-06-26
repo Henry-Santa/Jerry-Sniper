@@ -105,6 +105,9 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
                 if (real_name.includes("Lvl")){
                     real_name += auction['tier'];
                 }
+                if (auction["item_name"].includes("100")){
+                    real_name += "100";
+                }
                 
                 if (!(items.has(real_name))){
                     items.set(real_name, [])
