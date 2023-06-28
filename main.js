@@ -4,11 +4,14 @@ const ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const STATUS = document.getElementById("status-display-text");
 const API = "https://api.hypixel.net/skyblock/auctions?page=0"
 const ITEMSAPI = "https://api.hypixel.net/resources/skyblock/items"
+const CUSTOMITEMSAPI = "https://jerrry-server.vercel.app/api/prices"
+const SHORTENRARITY = {
+    "legendary" : "leg",
+    "epic"      : "epic"
+}
 
-const PROFITMIN = 500000
-const PERMIN = 0.15
-const STOCKMIN = 15
-let pages = 0;
+
+let pages = 50;
 
 var itemTable = new Map()
 
@@ -17,9 +20,15 @@ numberSort = function (a,b) {
 };
 
 async function getItemTable(){
-    var resp = await fetch(ITEMSAPI);
+    
+
+    var resp = await fetch(CUSTOMITEMSAPI);
     var json = await resp.json()
-    json.items.forEach(async item => {
+    for(item of Object.keys(json)) {
+        itemTable.set(item, json[item]);
+    }
+    /*
+    json.items.forEach(item => {
         let real_name = ""
         for (let char of item.name){
             if (ALPHA.includes(char)) {
@@ -58,6 +67,48 @@ async function getItemTable(){
         var final = new_words.join("")
         itemTable.set("Lvl"+final, {name : new_words.join(" "), id : pet.toUpperCase(), image: PET_DATA[pet.toUpperCase()].head})
     }
+    let promises = []
+    for (let item of itemTable.keys()){
+        
+        promises.push(new Promise(async (resolve, reject) => {
+            setTimeout(
+                async () => {
+                    if (item.startsWith("Lvl")){
+
+                        // level 1 cost legendary
+                        let resp = await fetch(PROXY + encodeURIComponent("https://sky.coflnet.com/api/item/price/" + itemTable.get(item).id + "_PET" + "?Rarity=Legendary&PetLevel=1"))
+                        let json = await resp.json()
+                        itemTable.get(item)["leg1"] = json.mode;
+                        // level 100 cost legendary
+                        resp = await fetch(PROXY + encodeURIComponent("https://sky.coflnet.com/api/item/price/" + itemTable.get(item).id + "_PET" + "?Rarity=Legendary&PetLevel=100"))
+                        json = await resp.json()
+                        itemTable.get(item)["leg100"] = json.mode;
+                        // level 1 cost epic
+                        resp = await fetch(PROXY + encodeURIComponent("https://sky.coflnet.com/api/item/price/" + itemTable.get(item).id + "_PET" + "?Rarity=Epic&PetLevel=1"))
+                        json = await resp.json()
+                        itemTable.get(item)["epic1"] = json.mode;
+                        // level 100 cost epic
+                        resp = await fetch(PROXY + encodeURIComponent("https://sky.coflnet.com/api/item/price/" + itemTable.get(item).id + "_PET" + "?Rarity=Epic&PetLevel=100"))
+                        json = await resp.json()
+                        itemTable.get(item)["epic100"] = json.mode;
+                    } else {
+                        let resp = await fetch(PROXY + encodeURIComponent("https://sky.coflnet.com/api/item/price/" + itemTable.get(item).id))
+                        let json = await resp.json()
+                        itemTable.get(item)["price"] = json.mode;
+                    }
+                    resolve()
+                }, Math.random()*30000
+            )
+            // https://sky.coflnet.com/api/item/price/SHEEP_PET?Rarity=LEGENDARY&PetLevel=1
+            // https://sky.coflnet.com/api/item/price/SHEEP_PET
+            
+            
+        }));
+
+    }
+    await Promise.all(promises)
+    */
+    console.log(itemTable)
 }
 
 async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HIDE_DRAGON_ITEMS, PROFITMIN, PERMIN, STOCKMIN, SORTTYPE, pages){
@@ -120,20 +171,41 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
     await Promise.all(promises)
     STATUS.innerText = "Calculating Flips...";
     profitable_flips = []
-    
-    items.forEach ((item, name) => {
+    promises = []
+    console.log(items.size)
+    items.forEach (async (item, name) => {
+        promises.push(
+            new Promise( (resolve, reject) => {
+                item.sort((a, b) => a.price - b.price)
+                if (item.length < STOCKMIN){} else{
+                    let im;
+                    try {im = itemTable.get(item[0].real).image} catch {im = "https://nmsr.nickac.dev/headiso/b341f7f22c7a4a2d9c50816a8e6759e8"}
+                    let price;
+
+                    if (name.startsWith("Lvl")){
+                        let level = "1"
+                        if (name.endsWith("100")){level = "100"}
+                        try{
+                            //console.log(SHORTENRARITY[item[0].rarity.toLowerCase()] + level, item[0].real)
+                            price = itemTable.get(item[0].real)[SHORTENRARITY[item[0].rarity.toLowerCase()] + level]
+                        } catch{
+                            price = 1000000000;
+                        }
+                        
+                    } else { try{price = itemTable.get(name).price} catch {price = 1000000000}}
+                    var flip = new ahFlip(item[0], item[0].price, Math.min(item[1].price, price), im)
+                    if (flip.profit >= PROFITMIN && flip.percent >= PERMIN && TierToNum[item[0].rarity] >= TierToNum[item[1].rarity]){
+                        profitable_flips.push(flip)
+                    }
+                    
+            } resolve()
+                
+        })
+        )
         
-        item.sort((a, b) => a.price - b.price)
-        if (item.length < STOCKMIN){} else{
-            let im;
-            try {im = itemTable.get(item[0].real).image} catch {im = "https://nmsr.nickac.dev/headiso/b341f7f22c7a4a2d9c50816a8e6759e8"}
-            var flip = new ahFlip(item[0], item[0].price, item[1].price, im)
-            if (flip.profit >= PROFITMIN && flip.percent >= PERMIN && TierToNum[item[0].rarity] >= TierToNum[item[1].rarity]){
-                profitable_flips.push(flip)
-            }
-        }
     })
-    
+    await Promise.all(promises)
+
     CONTAINER.innerHTML = "";
     console.log(profitable_flips.length)
     profitable_flips.sort((a, b) => {if (SORTTYPE == "profit"){return b.profit - a.profit}if (SORTTYPE == "margin"){return b.percent - a.percent}else {var textA = a.info.name.toUpperCase();var textB = b.info.name.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;}})
@@ -184,7 +256,7 @@ async function main(){
             useParams()
         }
     }, 400)
-
+    
 }
 
 main();
