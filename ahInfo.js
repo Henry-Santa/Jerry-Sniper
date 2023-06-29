@@ -49,8 +49,10 @@ class ahFlip {
             tax += this.target_price * 0.01;
         }
         this.profit -= tax
-        
+        this.profit = Math.round(this.profit);
+
         this.percent = this.profit/price;
+        
     }
 
     static createButtonListener(button){

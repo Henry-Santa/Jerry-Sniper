@@ -27,6 +27,11 @@ async function getItemTable(){
     for(item of Object.keys(json)) {
         itemTable.set(item, json[item]);
     }
+    for(item of itemTable.keys()){
+        if (itemTable.get(item).price){
+            itemTable.get(item).price = Math.round(itemTable.get(item).price)
+        }
+    }
     /*
     json.items.forEach(item => {
         let real_name = ""
