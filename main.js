@@ -24,7 +24,16 @@ async function fetchWithRetry(url, maxRetries = 3, timeout = 500) {
     let retries = 0;
     while (retries < maxRetries) {
         try {
-            const response = await fetch(url, { method: 'GET', timeout: timeout });
+            const controller = new AbortController();
+            const signal = controller.signal;
+
+            const timeoutId = setTimeout(() => {
+                controller.abort(); // Cancel the request after 500ms
+            }, timeout);
+
+            const response = await fetch(url, { method: 'GET', signal });
+            clearTimeout(timeoutId); // Clear the timeout if the request completes successfully
+
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
             }
