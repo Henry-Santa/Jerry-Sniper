@@ -24,7 +24,7 @@ async function fetchWithRetry(url, maxRetries = 3, timeout = 500) {
     let retries = 0;
     while (retries < maxRetries) {
         try {
-            const response = await fetch(url, { method: 'GET', timeout });
+            const response = await fetch(url, { method: 'GET', timeout = timeout });
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
             }
