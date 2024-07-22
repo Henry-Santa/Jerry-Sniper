@@ -224,6 +224,8 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
     });
     if (profitable_flips.length == 0){
         CONTAINER.innerHTML = "<p>No Snipe Flips Found :(</p>"
+    } else {
+        ding.play()
     }
     STATUS.innerText = "Waiting...";
 }
@@ -259,7 +261,7 @@ async function main(){
             last = json.lastUpdated;
             pages = json.totalPages;
             STATUS.innerText = "Getting total page count...";
-            ding.play()
+            
             useParams()
         }
     }, 400)
