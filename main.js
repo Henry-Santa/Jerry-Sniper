@@ -20,32 +20,7 @@ numberSort = function (a,b) {
     return a - b;
 };
 
-async function fetchWithRetry(url, maxRetries = 3, timeout = 500) {
-    let retries = 0;
-    while (retries < maxRetries) {
-        try {
-            const controller = new AbortController();
-            const signal = controller.signal;
 
-            const timeoutId = setTimeout(() => {
-                controller.abort(); // Cancel the request after 500ms
-            }, timeout);
-
-            const response = await fetch(url, { method: 'GET', signal });
-            clearTimeout(timeoutId); // Clear the timeout if the request completes successfully
-
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-            return await response.json(); // Adjust this based on your expected response format
-        } catch (error) {
-            console.error(`Request failed (retry ${retries + 1}): ${error.message}`);
-            retries++;
-            await new Promise((resolve) => setTimeout(resolve, timeout));
-        }
-    }
-    throw new Error(`Max retries reached for URL: ${url}`);
-}
 
 async function getItemTable(){
     
@@ -154,8 +129,8 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
         promises.push(new Promise(async (resolve, reject) => {
             
         
-        var response = await fetchWithRetry(`https://api.hypixel.net/skyblock/auctions?page=${i}`);
-        var j = response;
+        var response = await fetch(`https://api.hypixel.net/skyblock/auctions?page=${i}`);
+        var j = response.json();
         j.auctions.forEach(auction => {
 
             if (!auction.bin) { }
