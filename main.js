@@ -130,7 +130,7 @@ async function findFlips(HIDE_FURNITURE, HIDE_PET_SKINS, HIDE_DUNGEON_ITEMS, HID
             
         
         var response = await fetch(`https://api.hypixel.net/skyblock/auctions?page=${i}`);
-        var j = response.json();
+        var j = await response.json();
         j.auctions.forEach(auction => {
 
             if (!auction.bin) { }
