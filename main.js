@@ -5,7 +5,7 @@ const ding = new Audio("ding.mp3")
 const STATUS = document.getElementById("status-display-text");
 const API = "https://api.hypixel.net/skyblock/auctions?page=0"
 const ITEMSAPI = "https://api.hypixel.net/resources/skyblock/items"
-const CUSTOMITEMSAPI = "https://jerrry-server-8gg1k5c3l-henrysantas-projects.vercel.app/api/prices"
+const CUSTOMITEMSAPI = "https://jerrry-server-1k0g8xr3c-henrysantas-projects.vercel.app/api/prices"
 const SHORTENRARITY = {
     "legendary" : "leg",
     "epic"      : "epic"
